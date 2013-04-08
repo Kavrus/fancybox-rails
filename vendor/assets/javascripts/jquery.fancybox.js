@@ -371,7 +371,9 @@
 			_process_title();
 
 			if (wrap.is(":visible")) {
-				$( close.add( nav_left ).add( nav_right ) ).hide();
+			  if (currentOpts.reloadElements) {
+          $( close.add( nav_left ).add( nav_right ) ).hide();
+        }
 
 				pos = wrap.position(),
 
@@ -542,8 +544,10 @@
 						.appendTo( wrap );
 				break;
 			}
-
-			title.hide();
+      
+      if (currentOpts.reloadElements) {
+  			title.hide();
+  		}
 		},
 
 		_set_navigation = function() {
@@ -565,14 +569,22 @@
 				nav_right.hide();
 				return;
 			}
+			
+			if (currentOpts.reloadElements) {
+			  if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex !== 0) {
+  				nav_left.show();
+  			}
 
-			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex !== 0) {
-				nav_left.show();
-			}
+  			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex != (currentArray.length -1)) {
+  				nav_right.show();
+  			}
+			} else {
+  			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex !== 0) nav_left.addClass("active");
+  			else nav_left.removeClass("active");
 
-			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex != (currentArray.length -1)) {
-				nav_right.show();
-			}
+  			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex != (currentArray.length -1)) nav_right.addClass("active");
+  			else nav_right.removeClass("active");
+  		}
 		},
 
 		_finish = function () {
@@ -936,7 +948,9 @@
 
 		_abort();
 
-		$(close.add( nav_left ).add( nav_right )).hide();
+    if (currentOpts.reloadElements) {
+  		$(close.add( nav_left ).add( nav_right )).hide();
+  	}
 
 		$(content.add( overlay )).unbind();
 
@@ -1140,6 +1154,8 @@
 		showNavArrows : true,
 		enableEscapeButton : true,
 		enableKeyboardNav : true,
+		
+		reloadElements: true,
 
 		onStart : function(){},
 		onCancel : function(){},
